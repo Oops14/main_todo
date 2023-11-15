@@ -12,6 +12,9 @@ export const TodoList = () => {
     const [todos, setTodos] = useState<Array<TodosType>>([]);
     React.useEffect(() => console.log("data", todos), [todos]);
 
+    const [check, setChecked] = useState<boolean>(true);
+    // React.useEffect(() => console.log("data", check), [check]);
+
     let addTodo = (addTodo: string) => {
         setTodos([
             ...todos,
@@ -23,6 +26,15 @@ export const TodoList = () => {
         ]);
     };
 
+    let isChecked = (id: string) => {
+        setTodos(
+            todos.map((item) =>
+                item.id === id ? { ...item, isDone: check } : item
+            )
+        );
+        setChecked(!check);
+    };
+
     return (
         <div>
             <h3>What to learn</h3>
@@ -30,13 +42,15 @@ export const TodoList = () => {
             <ul className="todo-list">
                 {todos.map((item) => {
                     return (
-                        <li key={item.id}>
+                        <li
+                            key={item.id}
+                            className={item.isDone ? "todo-item done" : "todo-item"}
+                        >
                             <input
                                 type="checkbox"
-                                onClick={() => {
-                                    item.isDone
-                                        ? (item.isDone = false)
-                                        : (item.isDone = true);
+                                checked={item.isDone}
+                                onChange={() => {
+                                    isChecked(item.id);
                                 }}
                             />
                             <span>{item.todoItemName}</span>
