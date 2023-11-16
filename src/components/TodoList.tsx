@@ -35,6 +35,10 @@ export const TodoList = () => {
         setChecked(!check);
     };
 
+    let removeItem = (id: any) => {
+        setTodos(todos.filter((item) => item.id !== id ? {...item} : ""));
+    }
+
     return (
         <div>
             <h3>What to learn</h3>
@@ -55,7 +59,11 @@ export const TodoList = () => {
                                     isChecked(item.id);
                                 }}
                             />
-                            <span>{item.todoItemName}</span>
+                            <span>{item.todoItemName} </span>
+                            <button onClick={() => {
+                                removeItem(item.id);
+                            }}>x
+                            </button>
                         </li>
                     );
                 })}
