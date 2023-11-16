@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { TodoForm } from "./TodoForm";
+import React, {useState} from "react";
+import {v4 as uuidv4} from "uuid";
+import {TodoForm} from "./TodoForm";
 
 type TodosType = {
     id: string;
@@ -29,7 +29,7 @@ export const TodoList = () => {
     let isChecked = (id: string) => {
         setTodos(
             todos.map((item) =>
-                item.id === id ? { ...item, isDone: check } : item
+                item.id === id ? {...item, isDone: check} : item
             )
         );
         setChecked(!check);
@@ -38,13 +38,15 @@ export const TodoList = () => {
     return (
         <div>
             <h3>What to learn</h3>
-            <TodoForm addTodo={addTodo} />
+            <TodoForm addTodo={addTodo}/>
             <ul className="todo-list">
                 {todos.map((item) => {
                     return (
                         <li
                             key={item.id}
-                            className={item.isDone ? "todo-item done" : "todo-item"}
+                            className={
+                                item.isDone ? "todo-item done" : "todo-item"
+                            }
                         >
                             <input
                                 type="checkbox"
