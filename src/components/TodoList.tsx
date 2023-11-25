@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {ChangeEvent, useState} from "react";
 import {v4 as uuidv4} from "uuid";
 import {TodoForm} from "./TodoForm";
 
@@ -12,9 +12,6 @@ export const TodoList = () => {
     const [todos, setTodos] = useState<Array<TodosType>>([]);
     React.useEffect(() => console.log("data", todos), [todos]);
 
-    const [check, setChecked] = useState<boolean>(true);
-    // React.useEffect(() => console.log("data", check), [check]);
-
     let addTodo = (addTodo: string) => {
         setTodos([
             ...todos,
@@ -26,17 +23,22 @@ export const TodoList = () => {
         ]);
     };
 
-    let isChecked = (id: string) => {
-        setTodos(
-            todos.map((item) =>
-                item.id === id ? {...item, isDone: check} : item
-            )
-        );
-        setChecked(!check);
+    let isChecked = (id: string, isDone: boolean) => {
+        let task = todos.find(item => item.id === id);
+
+        if (task) {
+            task.isDone = isDone;
+            setTodos([...todos]);
+        }
     };
 
     let removeItem = (id: any) => {
         setTodos(todos.filter((item) => item.id !== id ? {...item} : ""));
+    }
+
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>, id: string) => {
+        let newIsDoneValue = e.currentTarget.checked;
+        isChecked(id, newIsDoneValue);
     }
 
     return (
@@ -55,11 +57,11 @@ export const TodoList = () => {
                             <input
                                 type="checkbox"
                                 checked={item.isDone}
-                                onChange={() => {
-                                    isChecked(item.id);
+                                onChange={(e) => {
+                                    onChangeHandler(e, item.id);
                                 }}
                             />
-                            <span>{item.todoItemName} </span>
+                            <span className={'todo-item-name'}>{item.todoItemName} </span>
                             <button onClick={() => {
                                 removeItem(item.id);
                             }}>x

@@ -6,3 +6,17 @@
 .App > div {
   margin-right: 50px;
 }
+
+.todo-item {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.todo-item-name {
+    flex-grow: 1;
+}
+
+.done {
+    text-decoration: line-through;
+    opacity: 0.3;
+}

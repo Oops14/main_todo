@@ -20,7 +20,7 @@ export const TodoForm = (props: TodoFormType) => {
             />
             <button
                 onClick={() => {
-                    props.addTodo(item);
+                    item.trim() !== '' ? props.addTodo(item) : alert('The task cannot be empty!');
                     setItem("");
                 }}
             >
