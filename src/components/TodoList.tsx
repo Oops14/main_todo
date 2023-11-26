@@ -1,52 +1,28 @@
-import React, {ChangeEvent, useState} from "react";
-import {v4 as uuidv4} from "uuid";
-import {TodoForm} from "./TodoForm";
+import React, { ChangeEvent, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { TodoForm } from "./TodoForm";
+import { TodosType } from "../App";
 
-type TodosType = {
-    id: string;
-    todoItemName: string;
-    isDone?: boolean;
-};
+type TodoListPropsType = {
+    isChecked: (id: string, isDone: boolean) => void;
+    removeItem: (id: any) => void;
+    addTodo: (addTodo: string) => void ;
+    todos: Array<TodosType>;
+}
 
-export const TodoList = () => {
-    const [todos, setTodos] = useState<Array<TodosType>>([]);
-    React.useEffect(() => console.log("data", todos), [todos]);
-
-    let addTodo = (addTodo: string) => {
-        setTodos([
-            ...todos,
-            {
-                id: uuidv4(),
-                todoItemName: addTodo,
-                isDone: false,
-            },
-        ]);
-    };
-
-    let isChecked = (id: string, isDone: boolean) => {
-        let task = todos.find(item => item.id === id);
-
-        if (task) {
-            task.isDone = isDone;
-            setTodos([...todos]);
-        }
-    };
-
-    let removeItem = (id: any) => {
-        setTodos(todos.filter((item) => item.id !== id ? {...item} : ""));
-    }
+export const TodoList = (props: TodoListPropsType) => {
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>, id: string) => {
         let newIsDoneValue = e.currentTarget.checked;
-        isChecked(id, newIsDoneValue);
-    }
+        props.isChecked(id, newIsDoneValue);
+    };
 
     return (
         <div>
             <h3>What to learn</h3>
-            <TodoForm addTodo={addTodo}/>
+            <TodoForm addTodo={props.addTodo} />
             <ul className="todo-list">
-                {todos.map((item) => {
+                {props.todos.map((item) => {
                     return (
                         <li
                             key={item.id}
@@ -61,10 +37,15 @@ export const TodoList = () => {
                                     onChangeHandler(e, item.id);
                                 }}
                             />
-                            <span className={'todo-item-name'}>{item.todoItemName} </span>
-                            <button onClick={() => {
-                                removeItem(item.id);
-                            }}>x
+                            <span className={"todo-item-name"}>
+                                {item.todoItemName}{" "}
+                            </span>
+                            <button
+                                onClick={() => {
+                                    props.removeItem(item.id);
+                                }}
+                            >
+                                x
                             </button>
                         </li>
                     );
