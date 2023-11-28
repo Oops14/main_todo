@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import { TodoList } from "./components/TodoList";
 import { v4 as uuidv4 } from "uuid";
@@ -39,7 +39,12 @@ function App() {
 
     return (
         <div className="App">
-            <TodoList todos={todos} isChecked={isChecked} removeItem={removeItem} addTodo={addTodo} />
+            <TodoList
+                todos={todos}
+                isChecked={isChecked}
+                removeItem={removeItem}
+                addTodo={addTodo}
+            />
         </div>
     );
 }

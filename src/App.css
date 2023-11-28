@@ -7,6 +7,20 @@
   margin-right: 50px;
 }
 
+.todo-form {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.error-input-message {
+  position: absolute;
+  font-size: 13px;
+  color: red;
+  bottom: -18px;
+}
+
 .todo-item {
     display: flex;
     margin-bottom: 10px;

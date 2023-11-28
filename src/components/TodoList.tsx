@@ -1,17 +1,15 @@
-import React, { ChangeEvent, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import React, { ChangeEvent } from "react";
 import { TodoForm } from "./TodoForm";
 import { TodosType } from "../App";
 
 type TodoListPropsType = {
     isChecked: (id: string, isDone: boolean) => void;
     removeItem: (id: any) => void;
-    addTodo: (addTodo: string) => void ;
+    addTodo: (addTodo: string) => void;
     todos: Array<TodosType>;
-}
+};
 
 export const TodoList = (props: TodoListPropsType) => {
-
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>, id: string) => {
         let newIsDoneValue = e.currentTarget.checked;
         props.isChecked(id, newIsDoneValue);
