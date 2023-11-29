@@ -7,6 +7,7 @@ type TodoListPropsType = {
     removeItem: (id: any) => void;
     addTodo: (addTodo: string) => void;
     todos: Array<TodosType>;
+    filterHandler: (filterValue: "all" | "completed" | "active") => void;
 };
 
 export const TodoList = (props: TodoListPropsType) => {
@@ -50,9 +51,27 @@ export const TodoList = (props: TodoListPropsType) => {
                 })}
             </ul>
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
+                <button
+                    onClick={() => {
+                        props.filterHandler("all");
+                    }}
+                >
+                    All
+                </button>
+                <button
+                    onClick={() => {
+                        props.filterHandler("active");
+                    }}
+                >
+                    Active
+                </button>
+                <button
+                    onClick={() => {
+                        props.filterHandler("completed");
+                    }}
+                >
+                    Completed
+                </button>
             </div>
         </div>
     );

@@ -13,6 +13,23 @@ function App() {
     const [todos, setTodos] = useState<Array<TodosType>>([]);
     React.useEffect(() => console.log("data", todos), [todos]);
 
+    const [filter, setFilter] = useState<"all" | "completed" | "active">("all");
+    // React.useEffect(() => console.log("data", filter), [filter]);
+
+    let filterHandler = (filterValue: "all" | "completed" | "active") => {
+        setFilter(filterValue);
+    };
+
+    let filteredTodos = todos;
+
+    if (filter === "active") {
+        filteredTodos = todos.filter(item => item.isDone === false);
+    }
+
+    if (filter === "completed") {
+        filteredTodos = todos.filter(item => item.isDone === true);
+    }
+
     let addTodo = (addTodo: string) => {
         setTodos([
             ...todos,
@@ -40,10 +57,11 @@ function App() {
     return (
         <div className="App">
             <TodoList
-                todos={todos}
+                todos={filteredTodos}
                 isChecked={isChecked}
                 removeItem={removeItem}
                 addTodo={addTodo}
+                filterHandler={filterHandler}
             />
         </div>
     );
