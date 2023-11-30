@@ -9,27 +9,32 @@ export type TodosType = {
     isDone?: boolean;
 };
 
+export type FilterType = "all" | "completed" | "active";
+
 function App() {
     const [todos, setTodos] = useState<Array<TodosType>>([]);
     React.useEffect(() => console.log("data", todos), [todos]);
 
-    const [filter, setFilter] = useState<"all" | "completed" | "active">("all");
+    const [filter, setFilter] = useState<FilterType>("all");
     // React.useEffect(() => console.log("data", filter), [filter]);
 
-    let filterHandler = (filterValue: "all" | "completed" | "active") => {
+    let filterHandler = (filterValue: FilterType) => {
         setFilter(filterValue);
     };
 
     let filteredTodos = todos;
 
+    // Filter tasks by clicking on the "Active" button.
     if (filter === "active") {
         filteredTodos = todos.filter(item => item.isDone === false);
     }
 
+    // Filter tasks by clicking on the "Completed" button.
     if (filter === "completed") {
         filteredTodos = todos.filter(item => item.isDone === true);
     }
 
+    // Add tasks from the input to the state.
     let addTodo = (addTodo: string) => {
         setTodos([
             ...todos,
@@ -51,7 +56,8 @@ function App() {
     };
 
     let removeItem = (id: any) => {
-        setTodos(todos.filter((item) => (item.id !== id ? { ...item } : "")));
+        let removeTodoItem = todos.filter(item => item.id !== id);
+        setTodos(removeTodoItem);
     };
 
     return (

@@ -1,13 +1,13 @@
 import React, { ChangeEvent } from "react";
 import { TodoForm } from "./TodoForm";
-import { TodosType } from "../App";
+import { FilterType, TodosType } from "../App";
 
 type TodoListPropsType = {
     isChecked: (id: string, isDone: boolean) => void;
     removeItem: (id: any) => void;
     addTodo: (addTodo: string) => void;
     todos: Array<TodosType>;
-    filterHandler: (filterValue: "all" | "completed" | "active") => void;
+    filterHandler: (filterValue: FilterType) => void;
 };
 
 export const TodoList = (props: TodoListPropsType) => {
