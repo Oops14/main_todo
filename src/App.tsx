@@ -52,7 +52,7 @@ function App() {
     ]);
 
     // const [filter, setFilter] = useState<FilterType>("all");
-    // React.useEffect(() => console.log("All todos", allTodos), [allTodos]);
+    // React.useEffect(() => console.log("All todos", todos), [todos]);
 
     const [todos, setTodos] = useState<any>({
         [allTodos[0].id]: [
@@ -86,6 +86,8 @@ function App() {
         ],
     });
 
+    React.useEffect(() => console.log(" todos", todos), [todos]);
+
     let filterHandler = (filterValue: FilterType, id: string) => {
         let todo = allTodos.find((item: any) => item.id === id);
 
@@ -97,14 +99,20 @@ function App() {
 
     // Add tasks from the input to the state.
     let addTodo = (addTodo: string, todoId: string) => {
-        setTodos([
-            ...todos[todoId],
-            {
-                id: uuidv4(),
-                todoItemName: addTodo,
-                isDone: false,
-            },
-        ]);
+        let todoListOfTasks = todos[todoId];
+        let task = {id: uuidv4(), todoItemName: addTodo, isDone: false,};
+
+        // setTodos([
+        //     ...todos,
+        //     {
+        //         id: uuidv4(),
+        //         todoItemName: addTodo,
+        //         isDone: false,
+        //     },
+        // ]);
+
+        todos[todoId] = [...todoListOfTasks, task];
+        setTodos({...todos});
     };
 
     let isChecked = (id: string, isDone: boolean, todoId: string) => {
@@ -114,7 +122,7 @@ function App() {
 
         if (task) {
             task.isDone = isDone;
-            setTodos({...todos});
+            setTodos({ ...todos });
         }
     };
 
