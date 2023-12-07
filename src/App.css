@@ -34,3 +34,8 @@
     text-decoration: line-through;
     opacity: 0.3;
 }
+
+.active-filter-button {
+  background-color: rgba(255, 0, 0, 0.733);
+  color: #fff;
+}

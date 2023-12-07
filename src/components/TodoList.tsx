@@ -3,25 +3,28 @@ import { TodoForm } from "./TodoForm";
 import { FilterType, TodosType } from "../App";
 
 type TodoListPropsType = {
-    isChecked: (id: string, isDone: boolean) => void;
-    removeItem: (id: any) => void;
-    addTodo: (addTodo: string) => void;
-    todos: Array<TodosType>;
-    filterHandler: (filterValue: FilterType) => void;
+    isChecked: (id: string, isDone: boolean, todoId: string) => void;
+    removeItem: (id: string, todoId: string) => void;
+    addTodo: (addTodo: string, todoId: string) => void;
+    todos: any;
+    filterHandler: (filterValue: FilterType, id: string) => void;
+    title: string;
+    todoId: string;
+    activeFilter: FilterType;
 };
 
 export const TodoList = (props: TodoListPropsType) => {
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>, id: string) => {
         let newIsDoneValue = e.currentTarget.checked;
-        props.isChecked(id, newIsDoneValue);
+        props.isChecked(id, newIsDoneValue, props.todoId);
     };
 
     return (
         <div>
-            <h3>What to learn</h3>
-            <TodoForm addTodo={props.addTodo} />
+            <h3>{props.title}</h3>
+            <TodoForm addTodo={props.addTodo} todoId={props.todoId} />
             <ul className="todo-list">
-                {props.todos.map((item) => {
+                {props.todos.map((item: TodosType) => {
                     return (
                         <li
                             key={item.id}
@@ -41,7 +44,7 @@ export const TodoList = (props: TodoListPropsType) => {
                             </span>
                             <button
                                 onClick={() => {
-                                    props.removeItem(item.id);
+                                    props.removeItem(item.id, props.todoId);
                                 }}
                             >
                                 x
@@ -51,23 +54,23 @@ export const TodoList = (props: TodoListPropsType) => {
                 })}
             </ul>
             <div>
-                <button
+                <button className={props.activeFilter === 'all' ? "active-filter-button" : ""}
                     onClick={() => {
-                        props.filterHandler("all");
+                        props.filterHandler("all", props.todoId);
                     }}
                 >
                     All
                 </button>
-                <button
+                <button className={props.activeFilter === 'active' ? "active-filter-button" : ""}
                     onClick={() => {
-                        props.filterHandler("active");
+                        props.filterHandler("active", props.todoId);
                     }}
                 >
                     Active
                 </button>
-                <button
+                <button className={props.activeFilter === 'completed' ? "active-filter-button" : ""}
                     onClick={() => {
-                        props.filterHandler("completed");
+                        props.filterHandler("completed", props.todoId);
                     }}
                 >
                     Completed

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 
 type TodoFormType = {
-    addTodo: (addTodo: any) => void;
+    addTodo: (addTodo: any, todoId: string) => void;
+    todoId: string;
 };
 
 export const TodoForm = (props: TodoFormType) => {
@@ -29,7 +30,7 @@ export const TodoForm = (props: TodoFormType) => {
             <button
                 onClick={() => {
                     item.trim() !== ""
-                        ? props.addTodo(item)
+                        ? props.addTodo(item, props.todoId)
                         : alert("The task cannot be empty!");
                     setItem("");
                     setError(true);
