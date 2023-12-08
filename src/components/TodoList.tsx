@@ -6,11 +6,12 @@ type TodoListPropsType = {
     isChecked: (id: string, isDone: boolean, todoId: string) => void;
     removeItem: (id: string, todoId: string) => void;
     addTodo: (addTodo: string, todoId: string) => void;
-    todos: any;
+    todos: Array<TodosType>;
     filterHandler: (filterValue: FilterType, id: string) => void;
     title: string;
     todoId: string;
     activeFilter: FilterType;
+    removeTodolist: (todoId: string) => void;
 };
 
 export const TodoList = (props: TodoListPropsType) => {
@@ -19,11 +20,20 @@ export const TodoList = (props: TodoListPropsType) => {
         props.isChecked(id, newIsDoneValue, props.todoId);
     };
 
+    const removeTodolist = () => {
+        props.removeTodolist(props.todoId);
+    }
+
+
     return (
         <div>
-            <h3>{props.title}</h3>
+            <div className="todolist-heading">
+                <h3 className="todolist-title">{props.title}</h3>
+                <button className="remove-todolist" onClick={removeTodolist}>X</button>
+            </div>
             <TodoForm addTodo={props.addTodo} todoId={props.todoId} />
             <ul className="todo-list">
+
                 {props.todos.map((item: TodosType) => {
                     return (
                         <li
