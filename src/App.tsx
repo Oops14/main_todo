@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 import { TodoList } from "./components/TodoList";
 import { v4 as uuidv4 } from "uuid";
+import { TodoItemForm } from "./components/TodoItemForm";
 
 export type TodosType = {
     id: string;
@@ -22,24 +23,8 @@ type AllTodoListsType = {
 };
 
 function App() {
-    // const [todos, setTodos] = useState<Array<TodosType>>([
-    //     {
-    //         id: uuidv4(),
-    //         todoItemName: "TEST",
-    //         isDone: false,
-    //     },
-    //     {
-    //         id: uuidv4(),
-    //         todoItemName: "Second Todo",
-    //         isDone: false,
-    //     },
-    // ]);
-
-    // React.useEffect(() => console.log("data", todos), [todos]);
-
     const todoListId1 = uuidv4();
     const todoListId2 = uuidv4();
-
 
     // Define all todo lists.
     const [allTodos, setAllTodos] = useState<Array<AllTodoListsType>>([
@@ -90,15 +75,21 @@ function App() {
         ],
     });
 
-    // React.useEffect(() => console.log(" todos", todos), [todos]);
+    let filterHandler = (filterValue: FilterType, todoListId: string) => {
+        // First solution.
+        // let todo = allTodos.find((item) => item.id === id);
 
-    let filterHandler = (filterValue: FilterType, id: string) => {
-        let todo = allTodos.find((item) => item.id === id);
+        // if (todo) {
+        //     todo.filter = filterValue;
+        //     setAllTodos([...allTodos]);
+        // }
 
-        if (todo) {
-            todo.filter = filterValue;
-            setAllTodos([...allTodos]);
-        }
+        // Second solution.
+        setAllTodos(
+            allTodos.map((item) =>
+                item.id === todoListId ? { ...item, filter: filterValue } : item
+            )
+        );
     };
 
     // Add tasks from the input to the state.
@@ -138,13 +129,31 @@ function App() {
     let removeTodolist = (todoId: string) => {
         let removeListOfTasks = allTodos.filter((item) => item.id !== todoId);
         setAllTodos(removeListOfTasks);
-        
+
         delete todos[todoId];
         setTodos({ ...todos });
     };
 
+    /**
+     * Add new Todo list.
+     */
+
+    const addNewTodo = (todoTile: string) => {
+        let todoListId = uuidv4();
+        let newTodoList: AllTodoListsType= { id: todoListId, title: todoTile, filter: "all" };
+
+        console.log(newTodoList);
+        setAllTodos([...allTodos, newTodoList]);
+        setTodos({ ...todos, [todoListId]: [] });
+    }
+
+    React.useEffect(() => console.log("All todos", allTodos), [allTodos]);
+
+
     return (
         <div className="App">
+            <TodoItemForm addNewTodo={addNewTodo}/>
+
             {allTodos.map((todo) => {
                 let filteredTodos = todos[todo.id];
 
