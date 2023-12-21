@@ -137,22 +137,39 @@ function App() {
     /**
      * Add new Todo list.
      */
-
     const addNewTodo = (todoTile: string) => {
         let todoListId = uuidv4();
-        let newTodoList: AllTodoListsType= { id: todoListId, title: todoTile, filter: "all" };
+        let newTodoList: AllTodoListsType = {
+            id: todoListId,
+            title: todoTile,
+            filter: "all",
+        };
 
-        console.log(newTodoList);
         setAllTodos([...allTodos, newTodoList]);
         setTodos({ ...todos, [todoListId]: [] });
-    }
+    };
 
-    React.useEffect(() => console.log("All todos", allTodos), [allTodos]);
+    /**
+     * Change Title of Todo list.
+     */
+    const editTitleTodo = (todoTile: string, todoId: string) => {
+        let newTodoList = allTodos.map((item) =>
+            item.id === todoId ? { ...item, title: todoTile } : item
+        );
+        setAllTodos(newTodoList);
+    };
 
+    /**
+     *  Change title of todo item.
+     */
+    const editTitleTodoOfItem = (todoItemTile: string, todoItemId: string, todoListId: string) => {
+        let todoListItem = todos[todoListId].map(item => item.id === todoItemId ? {...item, todoItemName: todoItemTile} : item);
+        setTodos({...todos, [todoListId]: todoListItem});
+    };
 
     return (
         <div className="App">
-            <TodoItemForm addNewTodo={addNewTodo}/>
+            <TodoItemForm addNewTodo={addNewTodo} />
 
             {allTodos.map((todo) => {
                 let filteredTodos = todos[todo.id];
@@ -183,6 +200,8 @@ function App() {
                         filterHandler={filterHandler}
                         activeFilter={todo.filter}
                         removeTodolist={removeTodolist}
+                        editTitleTodo={editTitleTodo}
+                        editTitleTodoOfItem={editTitleTodoOfItem}
                     />
                 );
             })}
