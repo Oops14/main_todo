@@ -8,16 +8,16 @@ type TodoItemFormType = {
 };
 
 export const TodoItemForm = (props: TodoItemFormType) => {
-    const [value, setValue] = useState("");
+    const [taskTitle, setTaskTitle] = useState("");
     const [error, setError] = useState(true);
     // React.useEffect(() => console.log("New Todo List", value), [value]);
 
     const addTask = () => {
-        value.trim() !== ""
-            ? props.addNewTodo(value)
+        taskTitle.trim() !== ""
+            ? props.addNewTodo(taskTitle)
             : alert("The task cannot be empty!");
 
-        setValue("");
+        setTaskTitle("");
         setError(true);
     };
 
@@ -25,17 +25,19 @@ export const TodoItemForm = (props: TodoItemFormType) => {
         e.preventDefault();
 
         // Show the "Required title" message below form.
-        e.currentTarget.value
-            ? setError(false)
-            : setError(true);
+        e.currentTarget.value ? setError(false) : setError(true);
 
-        setValue(e.currentTarget.value);
-    }
+        setTaskTitle(e.currentTarget.value);
+    };
 
     return (
         <div className="add-todo-form">
             <div>
-                <TextField value={value} onChange={showError} ErrorMessage={error}/>
+                <TextField
+                    value={taskTitle}
+                    onChange={showError}
+                    ErrorMessage={error}
+                />
             </div>
             <ButtonMain title={"+"} addTask={addTask} variant={"contained"} />
         </div>

@@ -3,6 +3,7 @@ import { TodoForm } from "../TodoForm";
 import { FilterType, TodosType } from "../../App";
 import { RemoveButton } from "../buttons/RemoveButton";
 import { ButtonMain } from "../buttons/ButtonMain";
+import { TextField } from "../TextField";
 
 type TodoListPropsType = {
     title: string;
@@ -56,11 +57,11 @@ export const TodoList = (props: TodoListPropsType) => {
 
     const showActiveTasks = () => {
         props.filterHandler("active", props.todoId);
-    }
+    };
 
     const showCompletedTasks = () => {
         props.filterHandler("completed", props.todoId);
-    }
+    };
 
     return (
         <div>
@@ -132,7 +133,9 @@ export const TodoList = (props: TodoListPropsType) => {
                 <ButtonMain
                     title={"Completed"}
                     variant={
-                        props.activeFilter === "completed" ? "contained" : "text"
+                        props.activeFilter === "completed"
+                            ? "contained"
+                            : "text"
                     }
                     addTask={showCompletedTasks}
                 />
@@ -175,13 +178,7 @@ const EditableSpan = (props: EditableSpanType) => {
     return (
         <>
             {editedTodoItem ? (
-                <input
-                    value={todoItemTitle}
-                    onBlur={activateViewMode}
-                    type="text"
-                    onChange={editTodoItemTitle}
-                    autoFocus
-                />
+                <TextField value={todoItemTitle} onBlur={activateViewMode} onChange={editTodoItemTitle} newTitle={props.newTitle}/>
             ) : (
                 <span
                     className={"todo-item-name"}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ButtonMain } from "./buttons/ButtonMain";
+import { TextField } from "./TextField";
 
 type TodoFormType = {
     addTodo: (addTodo: any, todoId: string) => void;
@@ -7,43 +8,36 @@ type TodoFormType = {
 };
 
 export const TodoForm = (props: TodoFormType) => {
-    const [item, setItem] = useState("");
+    const [todoTitle, settodoTitle] = useState("");
     const [error, setError] = useState(true);
-    // React.useEffect(() => console.log("data", item), [item]);
+    // React.useEffect(() => console.log("data", todoTitle), [todoTitle]);
 
     const addTask = () => {
-        item.trim() !== ""
-            ? props.addTodo(item, props.todoId)
+        todoTitle.trim() !== ""
+            ? props.addTodo(todoTitle, props.todoId)
             : alert("The task cannot be empty!");
 
-        setItem("");
+        settodoTitle("");
         setError(true);
     };
+
+    const showError = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+
+        // Show the "Required title" message below form.
+        e.currentTarget.value
+            ? setError(false)
+            : setError(true);
+
+        settodoTitle(e.currentTarget.value);
+    }
 
     return (
         <div className="todo-form">
             <div>
-                <input
-                    value={item}
-                    onChange={(e) => {
-                        e.preventDefault();
-
-                        // Show the "Required title" message below form.
-                        e.currentTarget.value
-                            ? setError(false)
-                            : setError(true);
-
-                        setItem(e.currentTarget.value);
-                    }}
-                />
-                {/* Show the "Required title" message below form. */}
-                {error && (
-                    <div className="error-input-message">
-                        Title is required!
-                    </div>
-                )}
+                <TextField value={todoTitle} onChange={showError} ErrorMessage={error}/>
             </div>
-            <ButtonMain title={"+"} addTask={addTask} variant={"contained"}/>
+            <ButtonMain title={"+"} addTask={addTask} variant={"contained"} />
         </div>
     );
 };
