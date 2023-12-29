@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ButtonMain } from "./buttons/ButtonMain";
 
 type TodoFormType = {
     addTodo: (addTodo: any, todoId: string) => void;
@@ -10,6 +11,15 @@ export const TodoForm = (props: TodoFormType) => {
     const [error, setError] = useState(true);
     // React.useEffect(() => console.log("data", item), [item]);
 
+    const addTask = () => {
+        item.trim() !== ""
+            ? props.addTodo(item, props.todoId)
+            : alert("The task cannot be empty!");
+
+        setItem("");
+        setError(true);
+    };
+
     return (
         <div className="todo-form">
             <div>
@@ -19,25 +29,21 @@ export const TodoForm = (props: TodoFormType) => {
                         e.preventDefault();
 
                         // Show the "Required title" message below form.
-                        e.currentTarget.value ? setError(false) : setError(true);
+                        e.currentTarget.value
+                            ? setError(false)
+                            : setError(true);
 
                         setItem(e.currentTarget.value);
                     }}
                 />
                 {/* Show the "Required title" message below form. */}
-                {error && <div className="error-input-message">Title is required!</div>}
+                {error && (
+                    <div className="error-input-message">
+                        Title is required!
+                    </div>
+                )}
             </div>
-            <button
-                onClick={() => {
-                    item.trim() !== ""
-                        ? props.addTodo(item, props.todoId)
-                        : alert("The task cannot be empty!");
-                    setItem("");
-                    setError(true);
-                }}
-            >
-                +
-            </button>
+            <ButtonMain title={"+"} addTask={addTask} variant={"contained"}/>
         </div>
     );
 };

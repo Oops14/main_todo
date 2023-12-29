@@ -1,19 +1,25 @@
 import React, { ChangeEvent, useState } from "react";
-import { TodoForm } from "./TodoForm";
-import { FilterType, TodosType } from "../App";
+import { TodoForm } from "../TodoForm";
+import { FilterType, TodosType } from "../../App";
+import { RemoveButton } from "../buttons/RemoveButton";
+import { ButtonMain } from "../buttons/ButtonMain";
 
 type TodoListPropsType = {
+    title: string;
+    todoId: string;
+    todos: Array<TodosType>;
+    activeFilter: FilterType;
     isChecked: (id: string, isDone: boolean, todoId: string) => void;
     removeItem: (id: string, todoId: string) => void;
     addTodo: (addTodo: string, todoId: string) => void;
-    todos: Array<TodosType>;
     filterHandler: (filterValue: FilterType, id: string) => void;
-    title: string;
-    todoId: string;
-    activeFilter: FilterType;
     removeTodolist: (todoId: string) => void;
     editTitleTodo: (todoTile: string, todoId: string) => void;
-    editTitleTodoOfItem: (todoItemTile: string, todoItemId: string, todoListId: string) => void;
+    editTitleTodoOfItem: (
+        todoItemTile: string,
+        todoItemId: string,
+        todoListId: string
+    ) => void;
 };
 
 export const TodoList = (props: TodoListPropsType) => {
@@ -43,6 +49,19 @@ export const TodoList = (props: TodoListPropsType) => {
         setEditedTodo(!editedTodo);
     };
 
+    // Filter Buttons actions.
+    const showAllTasks = () => {
+        props.filterHandler("all", props.todoId);
+    };
+
+    const showActiveTasks = () => {
+        props.filterHandler("active", props.todoId);
+    }
+
+    const showCompletedTasks = () => {
+        props.filterHandler("completed", props.todoId);
+    }
+
     return (
         <div>
             <div className="todolist-heading">
@@ -61,13 +80,15 @@ export const TodoList = (props: TodoListPropsType) => {
                         {props.title}
                     </h3>
                 )}
-                <button className="remove-todolist" onClick={removeTodolist}>
-                    X
-                </button>
+                <RemoveButton onClick={removeTodolist} />
             </div>
             <TodoForm addTodo={props.addTodo} todoId={props.todoId} />
             <ul className="todo-list">
                 {props.todos.map((item) => {
+                    const removeTodoTask = () => {
+                        props.removeItem(item.id, props.todoId);
+                    };
+
                     return (
                         <li
                             key={item.id}
@@ -88,54 +109,33 @@ export const TodoList = (props: TodoListPropsType) => {
                                 newTitle={props.editTitleTodoOfItem}
                                 todoListId={props.todoId}
                             />
-                            <button
-                                onClick={() => {
-                                    props.removeItem(item.id, props.todoId);
-                                }}
-                            >
-                                x
-                            </button>
+                            <RemoveButton onClick={removeTodoTask} />
                         </li>
                     );
                 })}
             </ul>
             <div>
-                <button
-                    className={
-                        props.activeFilter === "all"
-                            ? "active-filter-button"
-                            : ""
+                <ButtonMain
+                    title={"All"}
+                    variant={
+                        props.activeFilter === "all" ? "contained" : "text"
                     }
-                    onClick={() => {
-                        props.filterHandler("all", props.todoId);
-                    }}
-                >
-                    All
-                </button>
-                <button
-                    className={
-                        props.activeFilter === "active"
-                            ? "active-filter-button"
-                            : ""
+                    addTask={showAllTasks}
+                />
+                <ButtonMain
+                    title={"Active"}
+                    variant={
+                        props.activeFilter === "active" ? "contained" : "text"
                     }
-                    onClick={() => {
-                        props.filterHandler("active", props.todoId);
-                    }}
-                >
-                    Active
-                </button>
-                <button
-                    className={
-                        props.activeFilter === "completed"
-                            ? "active-filter-button"
-                            : ""
+                    addTask={showActiveTasks}
+                />
+                <ButtonMain
+                    title={"Completed"}
+                    variant={
+                        props.activeFilter === "completed" ? "contained" : "text"
                     }
-                    onClick={() => {
-                        props.filterHandler("completed", props.todoId);
-                    }}
-                >
-                    Completed
-                </button>
+                    addTask={showCompletedTasks}
+                />
             </div>
         </div>
     );
@@ -146,7 +146,11 @@ export const TodoList = (props: TodoListPropsType) => {
  */
 type EditableSpanType = {
     title: string;
-    newTitle: (todoItemTile: string, todoItemId: string, todoListId: string) => void;
+    newTitle: (
+        todoItemTile: string,
+        todoItemId: string,
+        todoListId: string
+    ) => void;
     id: string;
     todoListId: string;
 };

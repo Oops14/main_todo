@@ -1,34 +1,46 @@
 .App {
-  padding: 30px;
-  display: flex;
+    padding: 30px;
+    display: flex;
 }
 
 .App > div {
-  margin-right: 50px;
+    margin-right: 50px;
 }
 
 .todo-form {
-  position: relative;
-  display: flex;
-  align-items: center;
-  margin-bottom: 30px;
-  margin-top: 30px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.todo-form input,
+.add-todo-form input {
+    padding: 5px;
 }
 
 .error-input-message {
-  position: absolute;
-  font-size: 13px;
-  color: red;
-  bottom: -18px;
+    position: absolute;
+    font-size: 13px;
+    color: red;
+    bottom: -18px;
 }
 
 .todo-item {
     display: flex;
+    align-items: center;
     margin-bottom: 10px;
 }
 
 .todo-item-name {
     flex-grow: 1;
+		margin-right: 10px;
+}
+
+.todo-item input {
+	margin-right: 10px;
+	cursor: pointer;
 }
 
 .done {
@@ -37,21 +49,26 @@
 }
 
 .active-filter-button {
-  background-color: rgba(255, 0, 0, 0.733);
-  color: #fff;
+    background-color: rgba(255, 0, 0, 0.733);
+    color: #fff;
 }
 
 .todolist-heading {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
-
-
 .todolist-title {
-  flex-grow: 1;
+    flex-grow: 1;
 }
 
 .remove-todolist {
-  cursor: pointer;
+    cursor: pointer;
+}
+
+.add-todo-form {
+    position: relative;
+    height: 25px;
+    display: flex;
+    align-items: center;
 }

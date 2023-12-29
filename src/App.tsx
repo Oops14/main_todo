@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
-import { TodoList } from "./components/TodoList";
+import { TodoList } from "./components/todo_list/TodoList";
 import { v4 as uuidv4 } from "uuid";
 import { TodoItemForm } from "./components/TodoItemForm";
 
