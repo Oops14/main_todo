@@ -3,6 +3,8 @@ import "./App.css";
 import { TodoList } from "./components/todo_list/TodoList";
 import { v4 as uuidv4 } from "uuid";
 import { TodoItemForm } from "./components/TodoItemForm";
+import { Header } from "./components/header/Header";
+import { Container, Grid, Paper } from "@mui/material";
 
 export type TodosType = {
     id: string;
@@ -162,49 +164,74 @@ function App() {
     /**
      *  Change title of todo item.
      */
-    const editTitleTodoOfItem = (todoItemTile: string, todoItemId: string, todoListId: string) => {
-        let todoListItem = todos[todoListId].map(item => item.id === todoItemId ? {...item, todoItemName: todoItemTile} : item);
-        setTodos({...todos, [todoListId]: todoListItem});
+    const editTitleTodoOfItem = (
+        todoItemTile: string,
+        todoItemId: string,
+        todoListId: string
+    ) => {
+        let todoListItem = todos[todoListId].map((item) =>
+            item.id === todoItemId
+                ? { ...item, todoItemName: todoItemTile }
+                : item
+        );
+        setTodos({ ...todos, [todoListId]: todoListItem });
     };
 
     return (
         <div className="App">
-            <TodoItemForm addNewTodo={addNewTodo} />
+            <Header />
 
-            {allTodos.map((todo) => {
-                let filteredTodos = todos[todo.id];
+            <Container maxWidth="xl" style={{marginBottom: "80px"}}>
+                <Grid
+                    container
+                    style={{ padding: "20px", marginBottom: "80px" }}
+                >
+                    <TodoItemForm addNewTodo={addNewTodo} />
+                </Grid>
 
-                // Filter tasks by clicking on the "Active" button.
-                if (todo.filter === "active") {
-                    filteredTodos = todos[todo.id].filter(
-                        (item) => item.isDone === false
-                    );
-                }
+                <Grid container spacing={3}>
+                    {allTodos.map((todo) => {
+                        let filteredTodos = todos[todo.id];
 
-                // Filter tasks by clicking on the "Completed" button.
-                if (todo.filter === "completed") {
-                    filteredTodos = todos[todo.id].filter(
-                        (item) => item.isDone === true
-                    );
-                }
+                        // Filter tasks by clicking on the "Active" button.
+                        if (todo.filter === "active") {
+                            filteredTodos = todos[todo.id].filter(
+                                (item) => item.isDone === false
+                            );
+                        }
 
-                return (
-                    <TodoList
-                        key={todo.id}
-                        todoId={todo.id}
-                        title={todo.title}
-                        todos={filteredTodos}
-                        isChecked={isChecked}
-                        removeItem={removeItem}
-                        addTodo={addTodo}
-                        filterHandler={filterHandler}
-                        activeFilter={todo.filter}
-                        removeTodolist={removeTodolist}
-                        editTitleTodo={editTitleTodo}
-                        editTitleTodoOfItem={editTitleTodoOfItem}
-                    />
-                );
-            })}
+                        // Filter tasks by clicking on the "Completed" button.
+                        if (todo.filter === "completed") {
+                            filteredTodos = todos[todo.id].filter(
+                                (item) => item.isDone === true
+                            );
+                        }
+
+                        return (
+                            <Grid item columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                                <Paper style={{ padding: "10px" }}>
+                                    <TodoList
+                                        key={todo.id}
+                                        todoId={todo.id}
+                                        title={todo.title}
+                                        todos={filteredTodos}
+                                        isChecked={isChecked}
+                                        removeItem={removeItem}
+                                        addTodo={addTodo}
+                                        filterHandler={filterHandler}
+                                        activeFilter={todo.filter}
+                                        removeTodolist={removeTodolist}
+                                        editTitleTodo={editTitleTodo}
+                                        editTitleTodoOfItem={
+                                            editTitleTodoOfItem
+                                        }
+                                    />
+                                </Paper>
+                            </Grid>
+                        );
+                    })}
+                </Grid>
+            </Container>
         </div>
     );
 }

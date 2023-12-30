@@ -4,6 +4,7 @@ import { FilterType, TodosType } from "../../App";
 import { RemoveButton } from "../buttons/RemoveButton";
 import { ButtonMain } from "../buttons/ButtonMain";
 import { TextField } from "../TextField";
+import { Checkbox, Container } from "@mui/material";
 
 type TodoListPropsType = {
     title: string;
@@ -64,83 +65,86 @@ export const TodoList = (props: TodoListPropsType) => {
     };
 
     return (
-        <div>
-            <div className="todolist-heading">
-                {editedTodo ? (
-                    <input
-                        value={title}
-                        onChange={changeTitle}
-                        onBlur={activateViewMode}
-                        autoFocus
-                    />
-                ) : (
-                    <h3
-                        className="todolist-title"
-                        onDoubleClick={editTodoTitle}
-                    >
-                        {props.title}
-                    </h3>
-                )}
-                <RemoveButton onClick={removeTodolist} />
-            </div>
-            <TodoForm addTodo={props.addTodo} todoId={props.todoId} />
-            <ul className="todo-list">
-                {props.todos.map((item) => {
-                    const removeTodoTask = () => {
-                        props.removeItem(item.id, props.todoId);
-                    };
-
-                    return (
-                        <li
-                            key={item.id}
-                            className={
-                                item.isDone ? "todo-item done" : "todo-item"
-                            }
+        <Container maxWidth="xl">
+            <div className="todo-list">
+                <div className="todolist-heading">
+                    {editedTodo ? (
+                        <input
+                            value={title}
+                            onChange={changeTitle}
+                            onBlur={activateViewMode}
+                            autoFocus
+                        />
+                    ) : (
+                        <h3
+                            className="todolist-title"
+                            onDoubleClick={editTodoTitle}
                         >
-                            <input
-                                type="checkbox"
-                                checked={item.isDone}
-                                onChange={(e) => {
-                                    onChangeHandler(e, item.id);
-                                }}
-                            />
-                            <EditableSpan
-                                title={item.todoItemName}
-                                id={item.id}
-                                newTitle={props.editTitleTodoOfItem}
-                                todoListId={props.todoId}
-                            />
-                            <RemoveButton onClick={removeTodoTask} />
-                        </li>
-                    );
-                })}
-            </ul>
-            <div>
-                <ButtonMain
-                    title={"All"}
-                    variant={
-                        props.activeFilter === "all" ? "contained" : "text"
-                    }
-                    addTask={showAllTasks}
-                />
-                <ButtonMain
-                    title={"Active"}
-                    variant={
-                        props.activeFilter === "active" ? "contained" : "text"
-                    }
-                    addTask={showActiveTasks}
-                />
-                <ButtonMain
-                    title={"Completed"}
-                    variant={
-                        props.activeFilter === "completed"
-                            ? "contained"
-                            : "text"
-                    }
-                    addTask={showCompletedTasks}
-                />
+                            {props.title}
+                        </h3>
+                    )}
+                    <RemoveButton onClick={removeTodolist} />
+                </div>
+                <TodoForm addTodo={props.addTodo} todoId={props.todoId} />
+                <ul className="todo-list">
+                    {props.todos.map((item) => {
+                        const removeTodoTask = () => {
+                            props.removeItem(item.id, props.todoId);
+                        };
+
+                        return (
+                            <li
+                                key={item.id}
+                                className={
+                                    item.isDone ? "todo-item done" : "todo-item"
+                                }
+                            >
+                                <Checkbox
+                                    checked={item.isDone}
+                                    onChange={(e) => {
+                                        onChangeHandler(e, item.id);
+                                    }}
+                                />
+                                <EditableSpan
+                                    title={item.todoItemName}
+                                    id={item.id}
+                                    newTitle={props.editTitleTodoOfItem}
+                                    todoListId={props.todoId}
+                                />
+                                <RemoveButton onClick={removeTodoTask} />
+                            </li>
+                        );
+                    })}
+                </ul>
+                <div>
+                    <ButtonMain
+                        title={"All"}
+                        variant={
+                            props.activeFilter === "all" ? "contained" : "text"
+                        }
+                        addTask={showAllTasks}
+                    />
+                    <ButtonMain
+                        title={"Active"}
+                        variant={
+                            props.activeFilter === "active"
+                                ? "contained"
+                                : "text"
+                        }
+                        addTask={showActiveTasks}
+                    />
+                    <ButtonMain
+                        title={"Completed"}
+                        variant={
+                            props.activeFilter === "completed"
+                                ? "contained"
+                                : "text"
+                        }
+                        addTask={showCompletedTasks}
+                    />
+                </div>
             </div>
-        </div>
+        </Container>
     );
 };
 
@@ -178,7 +182,12 @@ const EditableSpan = (props: EditableSpanType) => {
     return (
         <>
             {editedTodoItem ? (
-                <TextField value={todoItemTitle} onBlur={activateViewMode} onChange={editTodoItemTitle} newTitle={props.newTitle}/>
+                <TextField
+                    value={todoItemTitle}
+                    onBlur={activateViewMode}
+                    onChange={editTodoItemTitle}
+                    newTitle={props.newTitle}
+                />
             ) : (
                 <span
                     className={"todo-item-name"}

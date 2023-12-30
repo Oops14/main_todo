@@ -1,12 +1,3 @@
-.App {
-    padding: 30px;
-    display: flex;
-}
-
-.App > div {
-    margin-right: 50px;
-}
-
 .todo-form {
     position: relative;
     display: flex;
@@ -18,6 +9,7 @@
 .todo-form input,
 .add-todo-form input {
     padding: 5px;
+    width: 100%;
 }
 
 .error-input-message {
