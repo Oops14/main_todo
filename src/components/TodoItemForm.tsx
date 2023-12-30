@@ -15,10 +15,14 @@ export const TodoItemForm = (props: TodoItemFormType) => {
     const addTask = () => {
         taskTitle.trim() !== ""
             ? props.addNewTodo(taskTitle)
-            : alert("The task cannot be empty!");
+            :( 
+                () => {
+                    alert("The title cannot be empty!");
+                    setError(true);
+                }
+            )();
 
         setTaskTitle("");
-        setError(true);
     };
 
     const showError = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,6 +34,10 @@ export const TodoItemForm = (props: TodoItemFormType) => {
         setTaskTitle(e.currentTarget.value);
     };
 
+    const showErrorWhenEmpty = () => {
+        setError(false);
+    };
+
     return (
         <div className="add-todo-form">
             <div>
@@ -37,6 +45,7 @@ export const TodoItemForm = (props: TodoItemFormType) => {
                     value={taskTitle}
                     onChange={showError}
                     ErrorMessage={error}
+                    onBlur={showErrorWhenEmpty}
                 />
             </div>
             <ButtonMain title={"+"} addTask={addTask} variant={"contained"} />

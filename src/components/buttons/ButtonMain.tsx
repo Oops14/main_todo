@@ -1,7 +1,8 @@
 import Button from "@mui/material/Button";
+import { ReactElement } from "react";
 
 type ButtonType = {
-    title: string;
+    title: ReactElement | string;
     addTask?: () => void;
     variant?: any;
 };
