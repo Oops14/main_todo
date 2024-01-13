@@ -12,13 +12,13 @@ export type TodosType = {
     isDone?: boolean;
 };
 
-type TodoListType = {
+export type TodoListType = {
     [key: string]: Array<TodosType>;
 };
 
 export type FilterType = "all" | "completed" | "active";
 
-type AllTodoListsType = {
+export type AllTodoListsType = {
     id: string;
     title: string;
     filter: FilterType;
@@ -125,7 +125,7 @@ function App() {
         let todoListOfTasks = todos[todoId];
         todos[todoId] = todoListOfTasks.filter((item) => item.id !== id);
 
-        setTodos({ ...todos });
+        setTodos({...todos });
     };
 
     let removeTodolist = (todoId: string) => {
