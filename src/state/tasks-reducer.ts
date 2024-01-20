@@ -1,4 +1,5 @@
 import { TodoListType } from "../App";
+import { v4 as uuidv4 } from "uuid";
 
 export type removeTaskActionType = ReturnType<typeof removeTaskAC>;
 export type addTaskActionType = ReturnType<typeof addTaskAC>;
@@ -76,7 +77,7 @@ export const tasksReducer = (
         case "ADD_TASK": {
             let todoListOfTasks = state[action.payload.todoListId];
             let task = {
-                id: "4",
+                id: uuidv4(),
                 todoItemName: action.payload.title,
                 isDone: false,
             };

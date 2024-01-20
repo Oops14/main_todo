@@ -96,11 +96,11 @@ function App() {
 
     // Add tasks from the input to the state.
     let addTodo = (addTodo: string, todoId: string) => {
-        let todoListOfTasks = todos[todoId];
-        let task = { id: uuidv4(), todoItemName: addTodo, isDone: false };
+        // let todoListOfTasks = todos[todoId];
+        // let task = { id: uuidv4(), todoItemName: addTodo, isDone: false };
 
-        todos[todoId] = [...todoListOfTasks, task];
-        setTodos({ ...todos });
+        // todos[todoId] = [...todoListOfTasks, task];
+        // setTodos({ ...todos });
 
         // setTodos([
         //     ...todos,

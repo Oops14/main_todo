@@ -4,7 +4,7 @@ import { TextField } from "./TextField";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 
 type TodoFormType = {
-    addTodo: (addTodo: any, todoId: string) => void;
+    addTodo: (addTodo: string, todoId: string) => void;
     todoId: string;
 };
 
