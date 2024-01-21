@@ -7,12 +7,13 @@ import { Header } from "./components/header/Header";
 import { Container, Grid, Paper } from "@mui/material";
 import {
     addTaskAC,
+    addTodoListTasksAC,
     changeTaskStatusAC,
     changeTaskTitleAC,
     removeTaskAC,
     tasksReducer,
 } from "./state/tasks-reducer";
-import { filterTodoAC, removeTodoAC, todolistsReducer } from "./state/todolists-reducer";
+import { addTodoListAC, filterTodoAC, removeTodoAC, todolistsReducer } from "./state/todolists-reducer";
 
 export type TodosType = {
     id: string;
@@ -116,14 +117,12 @@ function AppWithReducers() {
      * Add new Todo list.
      */
     const addNewTodo = (todoTile: string) => {
-        // let todoListId = uuidv4();
-        // let newTodoList: AllTodoListsType = {
-        //     id: todoListId,
-        //     title: todoTile,
-        //     filter: "all",
-        // };
-        // setAllTodos([...allTodos, newTodoList]);
-        // setTodos({ ...todos, [todoListId]: [] });
+        let todoListId = uuidv4();
+
+        const actionForTodoLists = addTodoListAC(todoTile, todoListId);
+        const actionForTasks = addTodoListTasksAC(todoTile, todoListId);
+        dispatchToTasks(actionForTasks);
+        dispatchToTodolists(actionForTodoLists);
     };
 
     /**

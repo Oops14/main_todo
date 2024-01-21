@@ -1,9 +1,11 @@
 import { AllTodoListsType, TodoListType } from "../AppWIthReducers";
+import { v4 as uuidv4 } from "uuid";
 
 type filterTodoACType = ReturnType<typeof filterTodoAC>;
 type removeTodoACType = ReturnType<typeof removeTodoAC>;
+type addTodoListACType = ReturnType<typeof addTodoListAC>;
 
-type ActionsType = filterTodoACType | removeTodoACType;
+type ActionsType = filterTodoACType | removeTodoACType | addTodoListACType;
 
 export const filterTodoAC = (todoListId: string, filterValue: string) => {
     return {
@@ -21,6 +23,15 @@ export const removeTodoAC = (todoListId: string, tasks: TodoListType) => {
         payload: {
             todoListId,
             tasks,
+        },
+    } as const;
+};
+
+export const addTodoListAC = (todoTile: string, todoListId: string) => {
+    return {
+        type: "ADD_TODOLIST",
+        payload: {
+            todoTile, todoListId
         },
     } as const;
 };
@@ -43,8 +54,16 @@ export const todolistsReducer = (
                 (item) => item.id !== action.payload.todoListId
             );
             delete action.payload.tasks[action.payload.todoListId];
-            // setTodos({ ...todos });
             return removeListOfTasks;
+        }
+        case "ADD_TODOLIST": {
+            let newTodoList: AllTodoListsType = {
+                id: action.payload.todoListId,
+                title: action.payload.todoTile,
+                filter: "all",
+            };
+
+            return [...state, newTodoList];
         }
         default:
             return state;

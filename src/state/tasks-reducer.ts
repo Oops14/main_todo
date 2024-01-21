@@ -5,12 +5,14 @@ export type removeTaskActionType = ReturnType<typeof removeTaskAC>;
 export type addTaskActionType = ReturnType<typeof addTaskAC>;
 export type changeStatusActionType = ReturnType<typeof changeTaskStatusAC>;
 export type changeTitleActionType = ReturnType<typeof changeTaskTitleAC>;
+export type addTodoListTasksACType = ReturnType<typeof addTodoListTasksAC>;
 
 type ActionsType =
     | removeTaskActionType
     | addTaskActionType
     | changeStatusActionType
-    | changeTitleActionType;
+    | changeTitleActionType
+    | addTodoListTasksACType;
 
 export const removeTaskAC = (id: string, todoListId: string) => {
     return {
@@ -62,6 +64,16 @@ export const changeTaskTitleAC = (
     } as const;
 };
 
+export const addTodoListTasksAC = (todoTile: string, todoListId: string) => {
+    return {
+        type: "ADD_TODOLIST",
+        payload: {
+            todoTile, todoListId
+        },
+    } as const;
+};
+
+
 export const tasksReducer = (
     state: TodoListType,
     action: ActionsType
@@ -82,8 +94,7 @@ export const tasksReducer = (
                 isDone: false,
             };
 
-            state[action.payload.todoListId] = [task, ...todoListOfTasks];
-            return { ...state };
+            return { ...state, [action.payload.todoListId]: [task, ...todoListOfTasks]};
         }
         case "CHANGE_STATUS": {
             let task = state[action.payload.todoListId].find(
@@ -103,6 +114,9 @@ export const tasksReducer = (
                     : item
             );
             return { ...state, [action.payload.todoListId]: todoListItem };
+        }
+        case "ADD_TODOLIST": {
+            return { ...state, [action.payload.todoListId]: [] };
         }
     }
 
