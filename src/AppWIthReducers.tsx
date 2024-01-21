@@ -1,4 +1,4 @@
-import React, { Reducer, useReducer, useState } from "react";
+import React, { useReducer } from "react";
 import "./App.css";
 import { TodoList } from "./components/todo_list/TodoList";
 import { v4 as uuidv4 } from "uuid";
@@ -150,7 +150,7 @@ function AppWithReducers() {
         //         : item
         // );
         // setTodos({ ...todos, [todoListId]: todoListItem });
-        const action = changeTaskTitleAC(todoItemTile, todoItemId, todoListId);
+        const action = changeTaskTitleAC(todoItemId ,todoItemTile, todoListId);
         dispatchToTasks(action);
     };
 
