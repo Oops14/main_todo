@@ -1,5 +1,6 @@
-import { AllTodoListsType, TodoListType, initialStateTodoLists } from "../AppWIthReducers";
-import { v4 as uuidv4 } from "uuid";
+// import { AllTodoListsType, TodoListType, initialStateTodoLists } from "../AppWIthReducers";
+
+import { AllTodoListsType, TodoListType } from "../AppWithRedux";
 
 type filterTodoACType = ReturnType<typeof filterTodoAC>;
 type removeTodoACType = ReturnType<typeof removeTodoAC>;
@@ -48,8 +49,10 @@ export const editTodoListAC = (todoTile: string, todoId: string) => {
     } as const;
 };
 
+let initialStateTodoLists: AllTodoListsType[] = [];
+
 export const todolistsReducer = (
-    state: AllTodoListsType[] = initialStateTodoLists,
+    state = initialStateTodoLists,
     action: ActionsTodolistsType
 ): AllTodoListsType[] => {
     switch (action.type) {

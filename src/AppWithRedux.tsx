@@ -14,8 +14,17 @@ import {
     removeTaskAC,
     tasksReducer,
 } from "./state/tasks-reducer";
-import { ActionsTodolistsType, addTodoListAC, editTodoListAC, filterTodoAC, removeTodoAC, todolistsReducer } from "./state/todolists-reducer";
+import {
+    ActionsTodolistsType,
+    addTodoListAC,
+    editTodoListAC,
+    filterTodoAC,
+    removeTodoAC,
+    todolistsReducer,
+} from "./state/todolists-reducer";
 import { Reducer } from "redux";
+import { useDispatch, useSelector } from "react-redux";
+import { AppRootStateType } from "./state/store";
 
 export type TodosType = {
     id: string;
@@ -35,84 +44,82 @@ export type AllTodoListsType = {
     filter: FilterType;
 };
 
-const todoListId1 = uuidv4();
-const todoListId2 = uuidv4();
+// const todoListId1 = uuidv4();
+// const todoListId2 = uuidv4();
+// let initialStateTodoLists: AllTodoListsType[] = [
+//     {
+//         id: todoListId1,
+//         title: "What to learn",
+//         filter: "all",
+//     },
+//     {
+//         id: todoListId2,
+//         title: "What to learn 2",
+//         filter: "all",
+//     },
+// ];
 
-function AppWithReducers() {
-    let initialStateTodoLists: AllTodoListsType[] = [
-        {
-            id: todoListId1,
-            title: "What to learn",
-            filter: "all",
-        },
-        {
-            id: todoListId2,
-            title: "What to learn 2",
-            filter: "all",
-        },
-    ];
-    
-    let initialStateTasks = {
-        [todoListId1]: [
-            {
-                id: uuidv4(),
-                todoItemName: "TEST",
-                isDone: false,
-            },
-            {
-                id: uuidv4(),
-                todoItemName: "Second Todo",
-                isDone: false,
-            },
-        ],
-        [todoListId2]: [
-            {
-                id: uuidv4(),
-                todoItemName: "TEST",
-                isDone: false,
-            },
-            {
-                id: uuidv4(),
-                todoItemName: "Second Todo",
-                isDone: false,
-            },
-            {
-                id: uuidv4(),
-                todoItemName: "Second Todo",
-                isDone: false,
-            },
-        ],
-    };
+// let initialStateTasks = {
+//     [todoListId1]: [
+//         {
+//             id: uuidv4(),
+//             todoItemName: "TEST",
+//             isDone: false,
+//         },
+//         {
+//             id: uuidv4(),
+//             todoItemName: "Second Todo",
+//             isDone: false,
+//         },
+//     ],
+//     [todoListId2]: [
+//         {
+//             id: uuidv4(),
+//             todoItemName: "TEST",
+//             isDone: false,
+//         },
+//         {
+//             id: uuidv4(),
+//             todoItemName: "Second Todo",
+//             isDone: false,
+//         },
+//         {
+//             id: uuidv4(),
+//             todoItemName: "Second Todo",
+//             isDone: false,
+//         },
+//     ],
+// };
 
-    const [allTodos, dispatchToTodolists] = useReducer<Reducer<AllTodoListsType[], ActionsTodolistsType>>(todolistsReducer, initialStateTodoLists);
-    const [state, dispatchToTasks] = useReducer<Reducer<TodoListType, ActionsType>>(
-        tasksReducer,
-        initialStateTasks
-    );
+function AppWithRedux() {
+
+    const allTodos = useSelector<AppRootStateType, Array<AllTodoListsType>>(state => state.todolists);
+    const tasks = useSelector<AppRootStateType, TodoListType>(state => state.tasks);
+    const dispatch = useDispatch();
 
     let filterHandler = (filterValue: FilterType, todoListId: string) => {
         const action = filterTodoAC(todoListId, filterValue);
-        dispatchToTodolists(action);
+        dispatch(action);
     };
 
     let addTodo = (addTodo: string, todoId: string) => {
         const action = addTaskAC(addTodo, todoId);
-        dispatchToTasks(action);
+        dispatch(action);
     };
 
     let isChecked = (id: string, isDone: boolean, todoId: string) => {
         const action = changeTaskStatusAC(id, isDone, todoId);
-        dispatchToTasks(action);
+        dispatch(action);
     };
 
     let removeItem = (id: string, todoId: string) => {
         const action = removeTaskAC(id, todoId);
-        dispatchToTasks(action);
+        dispatch(action);
     };
 
     let removeTodolist = (todoId: string) => {
-        const action = removeTodoAC(todoId, state);
-        dispatchToTodolists(action);
+        const action = removeTodoAC(todoId, tasks);
+        dispatch(action);
     };
 
     /**
@@ -122,9 +129,7 @@ function AppWithReducers() {
         let todoListId = uuidv4();
 
         const actionForTodoLists = addTodoListAC(todoTile, todoListId);
-        const actionForTasks = addTodoListTasksAC(todoTile, todoListId);
-        dispatchToTasks(actionForTasks);
-        dispatchToTodolists(actionForTodoLists);
+        dispatch(actionForTodoLists);
     };
 
     /**
@@ -132,7 +137,7 @@ function AppWithReducers() {
      */
     const editTitleTodo = (todoTile: string, todoId: string) => {
         const action = editTodoListAC(todoTile, todoId);
-        dispatchToTodolists(action);
+        dispatch(action);
     };
 
     /**
@@ -143,8 +148,8 @@ function AppWithReducers() {
         todoItemId: string,
         todoListId: string
     ) => {
-        const action = changeTaskTitleAC(todoItemId ,todoItemTile, todoListId);
-        dispatchToTasks(action);
+        const action = changeTaskTitleAC(todoItemId, todoItemTile, todoListId);
+        dispatch(action);
     };
 
     return (
@@ -161,18 +166,18 @@ function AppWithReducers() {
 
                 <Grid container spacing={3}>
                     {allTodos.map((todo) => {
-                        let filteredTodos = state[todo.id];
+                        let filteredTodos = tasks[todo.id];
 
                         // Filter tasks by clicking on the "Active" button.
                         if (todo.filter === "active") {
-                            filteredTodos = state[todo.id].filter(
+                            filteredTodos = tasks[todo.id].filter(
                                 (item) => item.isDone === false
                             );
                         }
 
                         // Filter tasks by clicking on the "Completed" button.
                         if (todo.filter === "completed") {
-                            filteredTodos = state[todo.id].filter(
+                            filteredTodos = tasks[todo.id].filter(
                                 (item) => item.isDone === true
                             );
                         }
@@ -206,4 +211,4 @@ function AppWithReducers() {
     );
 }
 
-export default AppWithReducers;
+export default AppWithRedux;
