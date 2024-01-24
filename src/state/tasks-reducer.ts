@@ -1,5 +1,6 @@
 import { TodoListType } from "../App";
 import { v4 as uuidv4 } from "uuid";
+import { initialStateTasks } from "../AppWIthReducers";
 
 export type removeTaskActionType = ReturnType<typeof removeTaskAC>;
 export type addTaskActionType = ReturnType<typeof addTaskAC>;
@@ -7,7 +8,7 @@ export type changeStatusActionType = ReturnType<typeof changeTaskStatusAC>;
 export type changeTitleActionType = ReturnType<typeof changeTaskTitleAC>;
 export type addTodoListTasksACType = ReturnType<typeof addTodoListTasksAC>;
 
-type ActionsType =
+export type ActionsType =
     | removeTaskActionType
     | addTaskActionType
     | changeStatusActionType
@@ -73,9 +74,8 @@ export const addTodoListTasksAC = (todoTile: string, todoListId: string) => {
     } as const;
 };
 
-
 export const tasksReducer = (
-    state: TodoListType,
+    state: TodoListType = initialStateTasks,
     action: ActionsType
 ): TodoListType => {
     switch (action.type) {
@@ -105,7 +105,7 @@ export const tasksReducer = (
                 task.isDone = action.payload.status;
                 return { ...state };
             }
-            return { ...state };
+            return state;
         }
         case "CHANGE_TITLE": {
             let todoListItem = state[action.payload.todoListId].map((item) =>
@@ -118,7 +118,8 @@ export const tasksReducer = (
         case "ADD_TODOLIST": {
             return { ...state, [action.payload.todoListId]: [] };
         }
+        default: {
+            return state;
+        }
     }
-
-    return state;
 };
