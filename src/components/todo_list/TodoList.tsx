@@ -1,16 +1,16 @@
 import React, { ChangeEvent, useState } from "react";
 import { TodoForm } from "../TodoForm";
-import { FilterType, TodosType } from "../../App";
 import { RemoveButton } from "../buttons/RemoveButton";
 import { ButtonMain } from "../buttons/ButtonMain";
 import { TextField } from "../TextField";
 import { Checkbox, Container } from "@mui/material";
+import {FilterType, TodosType} from "../../AppWithRedux";
 
 type TodoListPropsType = {
     title: string;
     todoId: string;
     todos: Array<TodosType>;
-    activeFilter: FilterType;
+    activeFilter?: FilterType;
     isChecked: (id: string, isDone: boolean, todoId: string) => void;
     removeItem: (id: string, todoId: string) => void;
     addTodo: (addTodo: string, todoId: string) => void;
@@ -25,6 +25,7 @@ type TodoListPropsType = {
 };
 
 export const TodoList = (props: TodoListPropsType) => {
+
     const [editedTodo, setEditedTodo] = useState(false);
     const [title, setTitle] = useState(props.title);
 
