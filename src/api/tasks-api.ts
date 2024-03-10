@@ -16,19 +16,7 @@ const instance = axios.create({
     },
 });
 
-export type TaskType = {
-    description: string;
-    todoItemName: string;
-    isDone: boolean;
-    status: number;
-    priority: number;
-    startDate: string;
-    deadline: string;
-    id: string;
-    todoListId: string;
-    order: number;
-    addedDate: string;
-}
+
 
 const todolistId = "a4f6e28e-b1cd-4d4d-a3d8-619f0c291f79";
 
