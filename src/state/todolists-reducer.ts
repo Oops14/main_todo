@@ -74,9 +74,9 @@ export const getTodolistsTC = () => (dispatch: Dispatch) => {
 }
 
 export const addTodolistTC = (title: string) => (dispatch: Dispatch) => {
-    todolistAPI.createTodolist(title).then((res) => {
-        console.log(res.data);
-        dispatch(addTodoListAC(title));
+    todolistAPI.createTodolist(title).then(() => {
+        const action = addTodoListAC(title);
+        dispatch(action);
     })
 }
 

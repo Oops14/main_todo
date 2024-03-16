@@ -1,7 +1,7 @@
-import { TodoListType } from "../AppWithRedux";
-import { getTodolistsACType } from "./todolists-reducer";
-import { Dispatch } from "redux";
-import { TaskType, tasksApi } from "../api/tasks-api";
+import {TodoListType} from "../AppWithRedux";
+import {getTodolistsACType} from "./todolists-reducer";
+import {Dispatch} from "redux";
+import {TaskType, tasksApi, UpdateTaskModelType, TaskStatuses, UpdateDomainTaskModelType} from "../api/tasks-api";
 import {AppRootStateType} from "./store";
 
 export type removeTaskActionType = ReturnType<typeof removeTaskAC>;
@@ -42,7 +42,7 @@ export const addTaskAC = (todoListId: string, task: TaskType) => {
 
 export const changeTaskStatusAC = (
     id: string,
-    status: boolean,
+    status: TaskStatuses,
     todoListId: string
 ) => {
     return {
@@ -110,10 +110,30 @@ export const removeTaskTC = (todolistId: string, taskId: string) => (dispatch: D
     })
 }
 
-export const updateTaskTC = (todoListId: string, taskId: string, title: string) => (dispatch: Dispatch, getState: () => AppRootStateType) => {
-    tasksApi.updateTask(todoListId, taskId, title).then((res) => {
-        dispatch(changeTaskTitleAC(taskId, title, todoListId));
-    });
+export const updateTaskTC = (todoListId: string, newValue: UpdateDomainTaskModelType, taskId: string) => (dispatch: Dispatch, getState: () => AppRootStateType) => {
+    let tasks = getState().tasks;
+    let task = tasks[todoListId].find(task => task.id === taskId);
+
+    if (task) {
+        let model: UpdateTaskModelType = {
+            title: task.title,
+            startDate: task.startDate,
+            priority: task.priority,
+            description: task.description,
+            deadline: task.deadline,
+            status: task.status,
+            ...newValue
+        }
+
+        tasksApi.updateTask(todoListId, taskId, model).then((res) => {
+            if (newValue.title !== undefined) {
+                dispatch(changeTaskTitleAC(taskId, model.title, todoListId));
+            } else if (newValue.status !== undefined) {
+                dispatch(changeTaskStatusAC(taskId, model.status, todoListId));
+            }
+        });
+    }
+
 }
 
 export const tasksReducer = (
@@ -134,7 +154,7 @@ export const tasksReducer = (
             state[action.payload.todoListId] = todoListOfTasks.filter(
                 (item) => item.id !== action.payload.id
             );
-            return { ...state };
+            return {...state};
         }
         case "ADD_TASK": {
             let todoListOfTasks = state[action.payload.todoListId];
@@ -149,25 +169,35 @@ export const tasksReducer = (
                 [action.payload.todoListId]: [task, ...todoListOfTasks],
             };
         }
-        // case "CHANGE_STATUS": {
-        //     let task = state[action.payload.todoListId].find(
-        //         (item) => item.id === action.payload.id
-        //     );
-        //
-        //     if (task) {
-        //         task.isDone = action.payload.status;
-        //         return {...state};
-        //     }
-        //     return state;
-        // }
-        case "CHANGE_TITLE": {
-           let todoListItem = state[action.payload.todoListId].map((item) =>
-               item.id === action.payload.id
-                   ? { ...item, title: action.payload.title }
-                   : item
-           );
+        case "CHANGE_STATUS": {
+            let task = state[action.payload.todoListId].find(
+                (item) => item.id === action.payload.id
+            );
 
-           return { ...state, [action.payload.todoListId]: todoListItem };
+            if (task) {
+                task.status = action.payload.status;
+                return {...state};
+            }
+
+            return state;
+
+            // let todolistTasks = state[action.payload.todoListId];
+            // let newTasksArray = todolistTasks.map(t => t.id === action.payload.id ? {
+            //     ...t,
+            //     status: action.payload.status
+            // } : t);
+            //
+            // state[action.payload.todoListId] = newTasksArray;
+            // return ({...state});
+        }
+        case "CHANGE_TITLE": {
+            let todoListItem = state[action.payload.todoListId].map((item) =>
+                item.id === action.payload.id
+                    ? {...item, title: action.payload.title}
+                    : item
+            );
+
+            return {...state, [action.payload.todoListId]: todoListItem};
         }
         default: {
             return state;

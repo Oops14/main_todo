@@ -53,11 +53,26 @@ export type UpdateTaskModelType = {
     deadline: string;
 };
 
+export type UpdateDomainTaskModelType = {
+    title?: string;
+    description?: string;
+    status?: TaskStatuses;
+    priority?: TaskPriorities;
+    startDate?: string;
+    deadline?: string;
+};
+
 export type GetTasksResponse = {
     error: string | null;
     totalCount: number;
     items: TaskType[];
 };
+
+export type ResponseType<D = {}> = {
+    resultCode: number
+    messages: Array<string>
+    data: D
+}
 
 export const tasksApi = {
     getTasks(todolistId: string) {
@@ -78,12 +93,7 @@ export const tasksApi = {
         );
         return promise;
     },
-    updateTask(todoListId: string, taskId: string, title: string) {
-        const promise = axios.put(
-            `https://social-network.samuraijs.com/api/1.1/todo-lists/${todoListId}/tasks/${taskId}`,
-            { title: title },
-            settings
-        );
-        return promise;
+    updateTask(todoListId: string, taskId: string, model: UpdateTaskModelType) {
+        return instance.put<ResponseType<TaskType>>(`todo-lists/${todoListId}/tasks/${taskId}`, model);
     },
 };

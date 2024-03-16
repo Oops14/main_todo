@@ -1,20 +1,20 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { TodoForm } from "../TodoForm";
-import { RemoveButton } from "../buttons/RemoveButton";
-import { ButtonMain } from "../buttons/ButtonMain";
-import { TextField } from "../TextField";
-import { Checkbox, Container } from "@mui/material";
-import { FilterType } from "../../AppWithRedux";
-import { useAppDispatch } from "../../state/store";
-import { getTasksTC } from "../../state/tasks-reducer";
-import { TaskType } from "../../api/tasks-api";
+import React, {ChangeEvent, useEffect, useState} from "react";
+import {TodoForm} from "../TodoForm";
+import {RemoveButton} from "../buttons/RemoveButton";
+import {ButtonMain} from "../buttons/ButtonMain";
+import {TextField} from "../TextField";
+import {Checkbox, Container} from "@mui/material";
+import {FilterType} from "../../AppWithRedux";
+import {useAppDispatch} from "../../state/store";
+import {getTasksTC} from "../../state/tasks-reducer";
+import {TaskStatuses, TaskType} from "../../api/tasks-api";
 
 type TodoListPropsType = {
     title: string;
     todoId: string;
     todos: Array<TaskType>;
     activeFilter?: FilterType;
-    isChecked: (id: string, isDone: boolean, todoId: string) => void;
+    isChecked: (taskId: string, status: TaskStatuses, todolistId: string) => void;
     removeItem: (todoId: string, id: string) => void;
     addTodo: (addTodo: string, todoId: string) => void;
     filterHandler: (filterValue: FilterType, id: string) => void;
@@ -38,7 +38,7 @@ export const TodoList = (props: TodoListPropsType) => {
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>, id: string) => {
         let newIsDoneValue = e.currentTarget.checked;
-        props.isChecked(id, newIsDoneValue, props.todoId);
+        props.isChecked(id, newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New, props.todoId);
     };
 
     const removeTodolist = () => {
@@ -110,8 +110,7 @@ export const TodoList = (props: TodoListPropsType) => {
                                 }
                             >
                                 <Checkbox
-                                    // TODO: CHANGE THE "CHECKED" BEHAIVOUR.
-                                    checked={false}
+                                    checked={item.status === TaskStatuses.Completed}
                                     onChange={(e) => {
                                         onChangeHandler(e, item.id);
                                     }}

@@ -5,9 +5,6 @@ import { TodoItemForm } from "./components/TodoItemForm";
 import { Header } from "./components/header/Header";
 import { Container, Grid, Paper } from "@mui/material";
 import {
-    changeTaskStatusAC,
-    changeTaskTitleAC,
-    removeTaskAC,
     removeTaskTC,
     updateTaskTC,
 } from "./state/tasks-reducer";
@@ -21,28 +18,14 @@ import {
 import { useSelector } from "react-redux";
 import { AppRootStateType, useAppDispatch } from "./state/store";
 import { TodolistType } from "./api/todolists-api";
-import { TaskType } from "./api/tasks-api";
+import {TaskStatuses, TaskType} from "./api/tasks-api";
 import { addTaskTC } from "./state/tasks-reducer";
-
-export type TodosType = {
-    id: string;
-    todoItemName: string;
-    isDone?: boolean;
-};
 
 export type TodoListType = {
     [key: string]: Array<TaskType>;
 };
 
 export type FilterType = "all" | "completed" | "active";
-
-export type AllTodoListsType = {
-    id: string;
-    title: string;
-    filter: FilterType;
-    addedDate?: string;
-    order?: number;
-};
 
 function AppWithRedux() {
     const dispatch = useAppDispatch();
@@ -67,9 +50,8 @@ function AppWithRedux() {
         dispatch(addTaskTC(todoId, addTodo));
     };
 
-    let isChecked = (id: string, isDone: boolean, todoId: string) => {
-        const action = changeTaskStatusAC(id, isDone, todoId);
-        dispatch(action);
+    let isChecked = (taskId: string, status: TaskStatuses, todolistId: string) => {
+        dispatch(updateTaskTC(todolistId, {status: status}, taskId));
     };
 
     let removeItem = (todoId: string, taskId: string) => {
@@ -109,7 +91,7 @@ function AppWithRedux() {
     ) => {
 //        const action = changeTaskTitleAC(todoItemId, todoItemTile, todoListId);
 //        dispatch(action);
-        dispatch(updateTaskTC(todoListId, todoItemId, todoItemTile));
+        dispatch(updateTaskTC(todoListId, {title: todoItemTile} ,todoItemId));
     };
 
     return (
