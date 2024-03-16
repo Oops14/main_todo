@@ -16,21 +16,56 @@ const instance = axios.create({
     },
 });
 
+export enum TaskStatuses {
+    New = 0,
+    InProgress = 1,
+    Completed = 2,
+    Draft = 3,
+}
 
+export enum TaskPriorities {
+    Low = 0,
+    Middle = 1,
+    Hi = 2,
+    Urgently = 3,
+    Later = 4,
+}
 
-const todolistId = "a4f6e28e-b1cd-4d4d-a3d8-619f0c291f79";
+export type TaskType = {
+    description: string;
+    title: string;
+    status: TaskStatuses;
+    priority: TaskPriorities;
+    startDate: string;
+    deadline: string;
+    id: string;
+    todoListId: string;
+    order: number;
+    addedDate: string;
+};
+
+export type UpdateTaskModelType = {
+    title: string;
+    description: string;
+    status: TaskStatuses;
+    priority: TaskPriorities;
+    startDate: string;
+    deadline: string;
+};
+
+export type GetTasksResponse = {
+    error: string | null;
+    totalCount: number;
+    items: TaskType[];
+};
 
 export const tasksApi = {
     getTasks(todolistId: string) {
-        const promise = axios.get(
-            `https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks`,
-            settings
-        );
-        return promise;
+        return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`);
     },
     createTask(todoListId: string, title: string) {
         const promise = axios.post(
-            `https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks`,
+            `https://social-network.samuraijs.com/api/1.1/todo-lists/${todoListId}/tasks`,
             { title: title },
             settings
         );

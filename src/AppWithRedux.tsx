@@ -1,25 +1,28 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import { TodoList } from "./components/todo_list/TodoList";
-import { v4 as uuidv4 } from "uuid";
 import { TodoItemForm } from "./components/TodoItemForm";
 import { Header } from "./components/header/Header";
 import { Container, Grid, Paper } from "@mui/material";
 import {
-    addTaskAC,
     changeTaskStatusAC,
     changeTaskTitleAC,
     removeTaskAC,
+    removeTaskTC,
+    updateTaskTC,
 } from "./state/tasks-reducer";
 import {
-    addTodoListAC,
+    addTodolistTC,
     editTodoListAC,
-    filterTodoAC, getTodolistsTC,
+    filterTodoAC,
+    getTodolistsTC,
     removeTodoAC,
 } from "./state/todolists-reducer";
-import { useDispatch, useSelector } from "react-redux";
-import {AppRootStateType, useAppDispatch} from "./state/store";
-import {todolistAPI} from "./api/todolists-api";
+import { useSelector } from "react-redux";
+import { AppRootStateType, useAppDispatch } from "./state/store";
+import { TodolistType } from "./api/todolists-api";
+import { TaskType } from "./api/tasks-api";
+import { addTaskTC } from "./state/tasks-reducer";
 
 export type TodosType = {
     id: string;
@@ -28,7 +31,7 @@ export type TodosType = {
 };
 
 export type TodoListType = {
-    [key: string]: Array<TodosType>;
+    [key: string]: Array<TaskType>;
 };
 
 export type FilterType = "all" | "completed" | "active";
@@ -48,8 +51,12 @@ function AppWithRedux() {
         dispatch(getTodolistsTC());
     }, []);
 
-    const allTodos = useSelector<AppRootStateType, Array<AllTodoListsType>>(state => state.todolists);
-    const tasks = useSelector<AppRootStateType, TodoListType>(state => state.tasks);
+    const allTodos = useSelector<AppRootStateType, Array<TodolistType>>(
+        (state) => state.todolists
+    );
+    const tasks = useSelector<AppRootStateType, TodoListType>(
+        (state) => state.tasks
+    );
 
     let filterHandler = (filterValue: FilterType, todoListId: string) => {
         const action = filterTodoAC(todoListId, filterValue);
@@ -57,8 +64,7 @@ function AppWithRedux() {
     };
 
     let addTodo = (addTodo: string, todoId: string) => {
-        const action = addTaskAC(addTodo, todoId);
-        dispatch(action);
+        dispatch(addTaskTC(todoId, addTodo));
     };
 
     let isChecked = (id: string, isDone: boolean, todoId: string) => {
@@ -66,9 +72,8 @@ function AppWithRedux() {
         dispatch(action);
     };
 
-    let removeItem = (id: string, todoId: string) => {
-        const action = removeTaskAC(id, todoId);
-        dispatch(action);
+    let removeItem = (todoId: string, taskId: string) => {
+        dispatch(removeTaskTC(todoId, taskId));
     };
 
     let removeTodolist = (todoId: string) => {
@@ -80,10 +85,10 @@ function AppWithRedux() {
      * Add new Todo list.
      */
     const addNewTodo = (todoTile: string) => {
-        let todoListId = uuidv4();
-
-        const actionForTodoLists = addTodoListAC(todoTile, todoListId);
-        dispatch(actionForTodoLists);
+        //        let todoListId = uuidv4();
+        //        const actionForTodoLists = addTodoListAC(todoTile, todoListId);
+        //        dispatch(actionForTodoLists);
+        dispatch(addTodolistTC(todoTile));
     };
 
     /**
@@ -102,8 +107,9 @@ function AppWithRedux() {
         todoItemId: string,
         todoListId: string
     ) => {
-        const action = changeTaskTitleAC(todoItemId, todoItemTile, todoListId);
-        dispatch(action);
+//        const action = changeTaskTitleAC(todoItemId, todoItemTile, todoListId);
+//        dispatch(action);
+        dispatch(updateTaskTC(todoListId, todoItemId, todoItemTile));
     };
 
     return (
@@ -123,18 +129,18 @@ function AppWithRedux() {
                         let filteredTodos = tasks[todo.id];
 
                         // Filter tasks by clicking on the "Active" button.
-                        if (todo.filter === "active") {
-                            filteredTodos = tasks[todo.id].filter(
-                                (item) => item.isDone === false
-                            );
-                        }
+                        // if (todo.filter === "active") {
+                        //     filteredTodos = tasks[todo.id].filter(
+                        //         (item) => item.isDone === false
+                        //     );
+                        // }
 
                         // Filter tasks by clicking on the "Completed" button.
-                        if (todo.filter === "completed") {
-                            filteredTodos = tasks[todo.id].filter(
-                                (item) => item.isDone === true
-                            );
-                        }
+                        // if (todo.filter === "completed") {
+                        //     filteredTodos = tasks[todo.id].filter(
+                        //         (item) => item.isDone === true
+                        //     );
+                        // }
 
                         return (
                             <Grid item columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
