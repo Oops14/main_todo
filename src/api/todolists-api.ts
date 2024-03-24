@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import {FilterType} from "../AppWithRedux";
 
 export type TodolistType = {
@@ -31,19 +31,13 @@ const instance = axios.create({
 
 export const todolistAPI = {
     updateTodolist(todolistId: string, title: string) {
-        const promise = instance.put<ResponseType>(`todo-lists/${todolistId}`, {
-            title: title,
-        });
-        return promise;
+        return instance.put<ResponseType>(`todo-lists/${todolistId}`, {title});
     },
     deleteTodolist(todolistId: string) {
-        const promise = instance.delete<ResponseType>(
-            `todo-lists/${todolistId}`
-        );
-        return promise;
+        return instance.delete<ResponseType>(`todo-lists/${todolistId}`);
     },
     createTodolist(title: string) {
-        return instance.post<ResponseType<{ item: TodolistType }>, AxiosResponse<ResponseType<{ item: TodolistType }>>, { title: string }>('todo-lists', {title});
+        return instance.post<ResponseType<{ item: TodolistType }>>(`todo-lists`, {title});
     },
     getTodolists() {
         return instance.get<TodolistType[]>('todo-lists');

@@ -1,7 +1,7 @@
 import {TodoListType} from "../AppWithRedux";
 import {Dispatch} from "redux";
 import {todolistAPI, TodolistType} from "../api/todolists-api";
-import { v1, v4 } from "uuid";
+import { v1 } from "uuid";
 
 type filterTodoACType = ReturnType<typeof filterTodoAC>;
 type removeTodoACType = ReturnType<typeof removeTodoAC>;
@@ -25,7 +25,6 @@ export const filterTodoAC = (todoListId: string, filterValue: string) => {
         },
     } as const;
 };
-
 export const removeTodoAC = (todoListId: string, tasks: TodoListType) => {
     return {
         type: "REMOVE_TODOLIST",
@@ -35,7 +34,6 @@ export const removeTodoAC = (todoListId: string, tasks: TodoListType) => {
         },
     } as const;
 };
-
 export const addTodoListAC = (title: string) => {
     return {
         type: 'ADD_TODOLIST',
@@ -45,7 +43,6 @@ export const addTodoListAC = (title: string) => {
         }
     } as const;
 };
-
 export const editTodoListAC = (todoTile: string, todoId: string) => {
     return {
         type: "EDIT_TODOLIST",
@@ -74,9 +71,9 @@ export const getTodolistsTC = () => (dispatch: Dispatch) => {
 }
 
 export const addTodolistTC = (title: string) => (dispatch: Dispatch) => {
-    todolistAPI.createTodolist(title).then(() => {
-        const action = addTodoListAC(title);
-        dispatch(action);
+    todolistAPI.createTodolist(title).then((res) => {
+        console.log(res.data);
+        // dispatch(addTodoListAC(res.data.data.item.title));
     })
 }
 

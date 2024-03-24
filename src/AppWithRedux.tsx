@@ -89,8 +89,6 @@ function AppWithRedux() {
         todoItemId: string,
         todoListId: string
     ) => {
-//        const action = changeTaskTitleAC(todoItemId, todoItemTile, todoListId);
-//        dispatch(action);
         dispatch(updateTaskTC(todoListId, {title: todoItemTile} ,todoItemId));
     };
 

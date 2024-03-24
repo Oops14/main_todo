@@ -133,7 +133,6 @@ export const updateTaskTC = (todoListId: string, newValue: UpdateDomainTaskModel
             }
         });
     }
-
 }
 
 export const tasksReducer = (

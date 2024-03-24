@@ -1,17 +1,9 @@
 import axios from "axios";
 
-let settings = {
-    withCredentials: true,
-    headers: {
-        "api-key": "e978cee6-9052-4e00-8ce2-2c6237679e1a",
-    },
-};
-
 const instance = axios.create({
     baseURL: "https://social-network.samuraijs.com/api/1.1/",
     withCredentials: true,
     headers: {
-        // Не забываем заменить API-KEY на собственный
         "api-key": "e978cee6-9052-4e00-8ce2-2c6237679e1a",
     },
 });
@@ -79,19 +71,10 @@ export const tasksApi = {
         return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`);
     },
     createTask(todoListId: string, title: string) {
-        const promise = axios.post(
-            `https://social-network.samuraijs.com/api/1.1/todo-lists/${todoListId}/tasks`,
-            { title: title },
-            settings
-        );
-        return promise;
+        return instance.post<ResponseType<{item: TaskType}>>(`todo-lists/${todoListId}/tasks`, {title});
     },
     deleteTask(todoListId: string, taskId: string) {
-        const promise = axios.delete(
-            `https://social-network.samuraijs.com/api/1.1/todo-lists/${todoListId}/tasks/${taskId}`,
-            settings
-        );
-        return promise;
+        return instance.delete<ResponseType>(`todo-lists/${todoListId}/tasks/${taskId}`);
     },
     updateTask(todoListId: string, taskId: string, model: UpdateTaskModelType) {
         return instance.put<ResponseType<TaskType>>(`todo-lists/${todoListId}/tasks/${taskId}`, model);
