@@ -43,12 +43,12 @@ export const addTodoListAC = (title: string) => {
         }
     } as const;
 };
-export const editTodoListAC = (todoTile: string, todoId: string) => {
+export const editTodoListAC = (todoTitle: string, todolistId: string) => {
     return {
         type: "EDIT_TODOLIST",
         payload: {
-            todoTile,
-            todoId,
+            todoTitle,
+            todolistId,
         },
     } as const;
 };
@@ -80,6 +80,12 @@ export const addTodolistTC = (title: string) => (dispatch: Dispatch) => {
 export const removeTodolistTC = (todoListId: string, tasks: TodoListType) => (dispatch: Dispatch) => {
     todolistAPI.deleteTodolist(todoListId).then(res => {
         dispatch(removeTodoAC(todoListId, tasks));
+    })
+}
+
+export const updateTodolistTC = (newTitle: string, todoListId: string) => (dispatch: Dispatch) => {
+    todolistAPI.updateTodolist(todoListId, newTitle).then(res => {
+        dispatch(editTodoListAC(newTitle, todoListId));
     })
 }
 
@@ -117,7 +123,7 @@ export const todolistsReducer = (
         }
         case "EDIT_TODOLIST": {
             let newTodoList = state.map((item) =>
-                item.id === action.payload.todoId ? {...item, title: action.payload.todoTile} : item
+                item.id === action.payload.todolistId ? {...item, title: action.payload.todoTitle} : item
             );
             return newTodoList;
         }
