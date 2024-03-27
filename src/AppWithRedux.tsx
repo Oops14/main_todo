@@ -14,6 +14,7 @@ import {
     filterTodoAC,
     getTodolistsTC,
     removeTodoAC,
+    removeTodolistTC,
 } from "./state/todolists-reducer";
 import { useSelector } from "react-redux";
 import { AppRootStateType, useAppDispatch } from "./state/store";
@@ -59,8 +60,9 @@ function AppWithRedux() {
     };
 
     let removeTodolist = (todoId: string) => {
-        const action = removeTodoAC(todoId, tasks);
-        dispatch(action);
+        // const action = removeTodoAC(todoId, tasks);
+        // dispatch(action);
+        dispatch(removeTodolistTC(todoId, tasks));
     };
 
     /**

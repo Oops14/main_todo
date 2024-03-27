@@ -77,6 +77,12 @@ export const addTodolistTC = (title: string) => (dispatch: Dispatch) => {
     })
 }
 
+export const removeTodolistTC = (todoListId: string, tasks: TodoListType) => (dispatch: Dispatch) => {
+    todolistAPI.deleteTodolist(todoListId).then(res => {
+        dispatch(removeTodoAC(todoListId, tasks));
+    })
+}
+
 export const todolistsReducer = (
     state = initialStateTodoLists,
     action: ActionsTodolistsType
